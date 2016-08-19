@@ -32,50 +32,53 @@ package com.wizzer.mle.parts.props;
 import com.wizzer.mle.runtime.core.IMleObject;
 import com.wizzer.mle.runtime.core.MleActor;
 import com.wizzer.mle.runtime.core.MleRole;
-import com.wizzer.mle.runtime.core.MleMediaRef;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
 
 // Import Magic Lantern Parts classes.
+import com.wizzer.mle.parts.j3d.props.I3dNodeTypeProperty;
 import com.wizzer.mle.parts.IMlePropPart;
-import com.wizzer.mle.parts.j2d.props.IImageProperty;
-import com.wizzer.mle.parts.roles.MleImageCarrier;
+import com.wizzer.mle.parts.roles.Mle3dNodeTypeCarrier;
 
 /**
- * This class implements an image property.
+ * This class implements an 3d node property.
  * 
  * @author Mark S. Millard
  */
-public class MleImageProperty implements IImageProperty
+public class Mle3dNodeTypeProperty implements I3dNodeTypeProperty
 {
-    // The media reference managed by the property.
-    private MleMediaRef m_image = null;
+    // The node type managed by the property.
+    public I3dNodeTypeProperty.NodeType m_nodeType;
 
     /**
      * The default constructor.
+     * <p>
+     * The node type is set to TRANSFORM by default.
+     * </p>
      */
-    public MleImageProperty()
+    public Mle3dNodeTypeProperty()
     {
         super();
+        m_nodeType = I3dNodeTypeProperty.NodeType.TRANSFORM;
     }
     
     /**
      * Get the property value.
      * 
-     * @return A <code>MleMediaRef</code> is returned.
+     * @return A <code>I3dNodeTypeProperty.NodeType</code> is returned.
      */
-    public MleMediaRef getProperty()
+    public I3dNodeTypeProperty.NodeType getProperty()
     {
-        return m_image;
+        return m_nodeType;
     }
     
     /**
      * Set the property value.
      * 
-     * @param reference This argument should be a <code>MleMediaRef</code>.
+     * @param nodeType This argument should be a <code>I3dNodeTypeProperty.NodeType</code>.
      */
-    public void setProperty(MleMediaRef reference)
+    public void setProperty(I3dNodeTypeProperty.NodeType nodeType)
     {
-    	m_image = reference;
+    	m_nodeType = nodeType;
     }
 
     /* (non-Javadoc)
@@ -84,10 +87,12 @@ public class MleImageProperty implements IImageProperty
     public boolean push(IMleObject obj)
         throws MleRuntimeException
     {
-    	boolean retValue;
-    	
-        MleActor actor = (MleActor) obj;
-        retValue = MleImageCarrier.set(actor.getRole(),m_image);
+    	boolean retValue = false;
+
+        if (obj instanceof MleActor) {
+            MleActor actor = (MleActor) obj;
+            retValue = Mle3dNodeTypeCarrier.set(actor.getRole(), m_nodeType);
+        }
         
         return retValue;
     }
@@ -98,9 +103,16 @@ public class MleImageProperty implements IImageProperty
     public boolean pull(IMleObject obj)
         throws MleRuntimeException
     {
-        MleRole role = (MleRole) obj;
+        boolean retValue = false;
 
-        return false;
+        if (obj instanceof MleRole) {
+            MleRole role = (MleRole) obj;
+            I3dNodeTypeProperty.NodeType value[] = new I3dNodeTypeProperty.NodeType[1];
+            retValue = Mle3dNodeTypeCarrier.get(role, value);
+            if (retValue == true) m_nodeType = value[0];
+        }
+
+        return retValue;
     }
 
     /* (non-Javadoc)
@@ -110,35 +122,13 @@ public class MleImageProperty implements IImageProperty
     {
         boolean retValue = false;
         
-        if (property instanceof MleImageProperty)
+        if (property instanceof Mle3dNodeTypeProperty)
         {
-            MleImageProperty tmp = (MleImageProperty)property;
-            if (tmp.m_image.equals(this.m_image))
+            Mle3dNodeTypeProperty tmp = (Mle3dNodeTypeProperty)property;
+            if (m_nodeType.equals(tmp.m_nodeType))
                 retValue = true;
         }
         
         return retValue;
-    }
-
-    /**
-     * Get the width of the image.
-     * 
-     * @return An integer value is returned.
-     */
-    public int getWidth(IMleObject obj)
-    {
-        MleActor actor = (MleActor) obj;
-        return MleImageCarrier.getWidth(actor.getRole());
-    }
-    
-    /**
-     * Get the height of the image.
-     * 
-     * @return An integer value is returned.
-     */
-    public int getHeight(IMleObject obj)
-    {
-        MleActor actor = (MleActor) obj;
-        return MleImageCarrier.getHeight(actor.getRole());
     }
 }
