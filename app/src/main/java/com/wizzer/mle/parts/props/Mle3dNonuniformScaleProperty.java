@@ -1,45 +1,47 @@
 package com.wizzer.mle.parts.props;
 
+import com.wizzer.mle.math.MlScalar;
 import com.wizzer.mle.math.MlTransform;
+import com.wizzer.mle.math.MlVector3;
+import com.wizzer.mle.parts.IMlePropPart;
+import com.wizzer.mle.parts.roles.Mle3dTransformCarrier;
 import com.wizzer.mle.runtime.core.IMleObject;
 import com.wizzer.mle.runtime.core.MleActor;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
-import com.wizzer.mle.parts.IMlePropPart;
-import com.wizzer.mle.parts.roles.Mle3dTransformCarrier;
 
 /**
  * Created by msm on 8/25/16.
  */
-public class Mle3dTransformProperty implements IMlePropPart
+public class Mle3dNonuniformScaleProperty implements IMlePropPart
 {
-    // The transform managed by the property.
-    private MlTransform m_transform = null;
+    // The translation managed by the property.
+    private MlVector3 m_scale = null;
 
-    public Mle3dTransformProperty()
+    public Mle3dNonuniformScaleProperty()
     {
         super();
-        m_transform = MlTransform.identity();
+        m_scale = new MlVector3(MlScalar.ML_SCALAR_ONE, MlScalar.ML_SCALAR_ONE, MlScalar.ML_SCALAR_ONE);
     }
 
     /**
      * Get the property value.
      *
-     * @return A <code>MlTransform</code> is returned.
+     * @return A <code>MlVector3</code> is returned.
      */
-    public MlTransform getProperty()
+    public MlVector3 getProperty()
     {
-        return m_transform;
+        return m_scale;
     }
 
     /**
      * Set the property value.
      *
-     * @param transform This argument should be a <code>MlTransform</code>.
+     * @param scale This argument should be a <code>MlVector3</code>.
      */
-    public void setProperty(MlTransform transform)
+    public void setProperty(MlVector3 scale)
     {
-        m_transform = transform;
+        m_scale = scale;
     }
 
     /* (non-Javadoc)
@@ -52,7 +54,13 @@ public class Mle3dTransformProperty implements IMlePropPart
 
         if (obj instanceof MleActor) {
             MleActor actor = (MleActor) obj;
-            retValue = Mle3dTransformCarrier.set(actor.getRole(), m_transform);
+
+            MlTransform transform = new MlTransform();
+            if (Mle3dTransformCarrier.get(actor.getRole(), transform)) {
+                transform.setScaleOnly(m_scale);
+
+                retValue = Mle3dTransformCarrier.set(actor.getRole(), transform);
+            }
         }
 
         return retValue;
@@ -78,10 +86,10 @@ public class Mle3dTransformProperty implements IMlePropPart
     {
         boolean retValue = false;
 
-        if (property instanceof Mle3dTransformProperty)
+        if (property instanceof Mle3dNonuniformScaleProperty)
         {
-            Mle3dTransformProperty tmp = (Mle3dTransformProperty) property;
-            if (tmp.m_transform.equals(this.m_transform))
+            Mle3dNonuniformScaleProperty tmp = (Mle3dNonuniformScaleProperty) property;
+            if (tmp.m_scale.equals(this.m_scale))
                 retValue = true;
         }
 

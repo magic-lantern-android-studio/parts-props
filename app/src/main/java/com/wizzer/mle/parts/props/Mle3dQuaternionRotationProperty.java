@@ -1,45 +1,48 @@
 package com.wizzer.mle.parts.props;
 
+import com.wizzer.mle.math.MlScalar;
 import com.wizzer.mle.math.MlTransform;
+import com.wizzer.mle.math.MlRotation;
+import com.wizzer.mle.parts.IMlePropPart;
+import com.wizzer.mle.parts.roles.Mle3dTransformCarrier;
 import com.wizzer.mle.runtime.core.IMleObject;
 import com.wizzer.mle.runtime.core.MleActor;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
-import com.wizzer.mle.parts.IMlePropPart;
-import com.wizzer.mle.parts.roles.Mle3dTransformCarrier;
 
 /**
  * Created by msm on 8/25/16.
  */
-public class Mle3dTransformProperty implements IMlePropPart
+public class Mle3dQuaternionRotationProperty implements IMlePropPart
 {
-    // The transform managed by the property.
-    private MlTransform m_transform = null;
+    // The rotation managed by the property.
+    private MlRotation m_rotation = null;
 
-    public Mle3dTransformProperty()
+    public Mle3dQuaternionRotationProperty()
     {
         super();
-        m_transform = MlTransform.identity();
+        m_rotation = new MlRotation(MlScalar.ML_SCALAR_ZERO, MlScalar.ML_SCALAR_ZERO,
+                MlScalar.ML_SCALAR_ZERO, MlScalar.ML_SCALAR_ONE);
     }
 
     /**
      * Get the property value.
      *
-     * @return A <code>MlTransform</code> is returned.
+     * @return A <code>MlRotation</code> is returned.
      */
-    public MlTransform getProperty()
+    public MlRotation getProperty()
     {
-        return m_transform;
+        return m_rotation;
     }
 
     /**
      * Set the property value.
      *
-     * @param transform This argument should be a <code>MlTransform</code>.
+     * @param rotation This argument should be a <code>MlRotation</code>.
      */
-    public void setProperty(MlTransform transform)
+    public void setProperty(MlRotation rotation)
     {
-        m_transform = transform;
+        m_rotation = rotation;
     }
 
     /* (non-Javadoc)
@@ -52,7 +55,13 @@ public class Mle3dTransformProperty implements IMlePropPart
 
         if (obj instanceof MleActor) {
             MleActor actor = (MleActor) obj;
-            retValue = Mle3dTransformCarrier.set(actor.getRole(), m_transform);
+
+            MlTransform transform = new MlTransform();
+            if (Mle3dTransformCarrier.get(actor.getRole(), transform)) {
+                transform.setRotationOnly(m_rotation);
+
+                retValue = Mle3dTransformCarrier.set(actor.getRole(), transform);
+            }
         }
 
         return retValue;
@@ -78,10 +87,10 @@ public class Mle3dTransformProperty implements IMlePropPart
     {
         boolean retValue = false;
 
-        if (property instanceof Mle3dTransformProperty)
+        if (property instanceof Mle3dQuaternionRotationProperty)
         {
-            Mle3dTransformProperty tmp = (Mle3dTransformProperty) property;
-            if (tmp.m_transform.equals(this.m_transform))
+            Mle3dQuaternionRotationProperty tmp = (Mle3dQuaternionRotationProperty) property;
+            if (tmp.m_rotation.equals(this.m_rotation))
                 retValue = true;
         }
 
