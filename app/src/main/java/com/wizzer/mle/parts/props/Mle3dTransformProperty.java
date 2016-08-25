@@ -1,45 +1,45 @@
 package com.wizzer.mle.parts.props;
 
-import com.wizzer.mle.parts.IMlePropPart;
-import com.wizzer.mle.parts.j3d.props.I3dModelProperty;
-import com.wizzer.mle.parts.roles.Mle3dModelCarrier;
+import com.wizzer.mle.math.MlTransform;
 import com.wizzer.mle.runtime.core.IMleObject;
 import com.wizzer.mle.runtime.core.MleActor;
-import com.wizzer.mle.runtime.core.MleMediaRef;
 import com.wizzer.mle.runtime.core.MleRole;
 import com.wizzer.mle.runtime.core.MleRuntimeException;
+import com.wizzer.mle.parts.IMlePropPart;
+import com.wizzer.mle.parts.roles.Mle3dTransformCarrier;
 
 /**
- * Created by msm on 8/22/16.
+ * Created by msm on 8/25/16.
  */
-public class Mle3dModelProperty implements I3dModelProperty
+public class Mle3dTransformProperty
 {
-    // The media reference managed by the property.
-    private MleMediaRef m_model = null;
+    // The transform managed by the property.
+    private MlTransform m_transform = null;
 
-    /**
-     * The default constructor.
-     */
-    public Mle3dModelProperty() { super(); }
+    public Mle3dTransformProperty()
+    {
+        super();
+        m_transform = MlTransform.identity();
+    }
 
     /**
      * Get the property value.
      *
-     * @return A <code>MleMediaRef</code> is returned.
+     * @return A <code>MlTransform</code> is returned.
      */
-    public MleMediaRef getProperty()
+    public MlTransform getProperty()
     {
-        return m_model;
+        return m_transform;
     }
 
     /**
      * Set the property value.
      *
-     * @param reference This argument should be a <code>MleMediaRef</code>.
+     * @param transform This argument should be a <code>MlTransform</code>.
      */
-    public void setProperty(MleMediaRef reference)
+    public void setProperty(MlTransform transform)
     {
-        m_model = reference;
+        m_transform = transform;
     }
 
     /* (non-Javadoc)
@@ -52,7 +52,7 @@ public class Mle3dModelProperty implements I3dModelProperty
 
         if (obj instanceof MleActor) {
             MleActor actor = (MleActor) obj;
-            retValue = Mle3dModelCarrier.set(actor.getRole(), m_model);
+            retValue = Mle3dTransformCarrier.set(actor.getRole(), m_transform);
         }
 
         return retValue;
@@ -78,10 +78,10 @@ public class Mle3dModelProperty implements I3dModelProperty
     {
         boolean retValue = false;
 
-        if (property instanceof Mle3dModelProperty)
+        if (property instanceof Mle3dTransformProperty)
         {
-            Mle3dModelProperty tmp = (Mle3dModelProperty)property;
-            if (tmp.m_model.equals(this.m_model))
+            Mle3dTransformProperty tmp = (Mle3dTransformProperty) property;
+            if (tmp.m_transform.equals(this.m_transform))
                 retValue = true;
         }
 

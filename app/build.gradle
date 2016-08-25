@@ -23,7 +23,7 @@ dependencies {
     compile files('libs/parts.jar')
     compile files('libs/roles.jar')
     testCompile 'junit:junit:4.12'
-
+    compile files('libs/mlmath.jar')
 }
 
 // Task to delete the old jar.
