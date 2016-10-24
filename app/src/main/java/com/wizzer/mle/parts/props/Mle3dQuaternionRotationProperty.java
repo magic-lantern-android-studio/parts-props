@@ -13,7 +13,7 @@ import com.wizzer.mle.runtime.core.MleRuntimeException;
 /**
  * Created by msm on 8/25/16.
  */
-public class Mle3dQuaternionRotationProperty implements IMlePropPart
+public class Mle3dQuaternionRotationProperty implements IMleQuaternionRotationProperty
 {
     // The rotation managed by the property.
     private MlRotation m_rotation = null;

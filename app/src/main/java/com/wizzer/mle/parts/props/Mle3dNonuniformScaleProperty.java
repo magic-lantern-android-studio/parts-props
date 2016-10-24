@@ -13,7 +13,7 @@ import com.wizzer.mle.runtime.core.MleRuntimeException;
 /**
  * Created by msm on 8/25/16.
  */
-public class Mle3dNonuniformScaleProperty implements IMlePropPart
+public class Mle3dNonuniformScaleProperty implements IMleNonuniformScaleProperty
 {
     // The translation managed by the property.
     private MlVector3 m_scale = null;

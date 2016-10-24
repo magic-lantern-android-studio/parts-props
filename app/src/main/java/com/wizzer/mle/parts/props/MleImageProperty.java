@@ -37,7 +37,6 @@ import com.wizzer.mle.runtime.core.MleRuntimeException;
 
 // Import Magic Lantern Parts classes.
 import com.wizzer.mle.parts.IMlePropPart;
-import com.wizzer.mle.parts.j2d.props.IImageProperty;
 import com.wizzer.mle.parts.roles.MleImageCarrier;
 
 /**
@@ -45,7 +44,7 @@ import com.wizzer.mle.parts.roles.MleImageCarrier;
  * 
  * @author Mark S. Millard
  */
-public class MleImageProperty implements IImageProperty
+public class MleImageProperty implements IMleImageProperty
 {
     // The media reference managed by the property.
     private MleMediaRef m_image = null;

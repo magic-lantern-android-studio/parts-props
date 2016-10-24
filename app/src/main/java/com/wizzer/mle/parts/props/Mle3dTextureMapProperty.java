@@ -12,7 +12,7 @@ import com.wizzer.mle.parts.roles.Mle3dTextureMapCarrier;
 /**
  * Created by msm on 8/30/16.
  */
-public class Mle3dTextureMapProperty implements IMlePropPart
+public class Mle3dTextureMapProperty implements IMleMediaRefProperty
 {
     // The media reference managed by the property.
     private MleMediaRef m_textureMap = null;

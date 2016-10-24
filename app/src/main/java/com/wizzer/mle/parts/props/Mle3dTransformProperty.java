@@ -11,7 +11,7 @@ import com.wizzer.mle.parts.roles.Mle3dTransformCarrier;
 /**
  * Created by msm on 8/25/16.
  */
-public class Mle3dTransformProperty implements IMlePropPart
+public class Mle3dTransformProperty implements IMleTransformProperty
 {
     // The transform managed by the property.
     private MlTransform m_transform = null;
